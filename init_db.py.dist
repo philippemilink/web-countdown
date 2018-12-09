@@ -1,0 +1,29 @@
+import sqlite3
+
+conn = sqlite3.connect('database.db')
+print("Opened database successfully");
+
+conn.execute('CREATE TABLE IF NOT EXISTS talks ('
+	'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+	'title CHAR(255),'
+	'start_hour INT,'
+	'start_minute INT,'
+	'length_minutes INT,'
+	'real_start_hour INT,'
+	'real_start_minute INT,'
+	'real_length_minutes INT)')
+print("Table created successfully");
+
+talks = [
+	# ["Introduction", 9, 0, 15],
+	# ...
+]
+
+cur = conn.cursor()
+for talk in talks:
+	cur.execute("INSERT INTO talks (title, start_hour, start_minute, length_minutes) VALUES(?, ?, ?, ?)",
+		(talk[0], talk[1], talk[2], talk[3]))
+
+conn.commit()
+
+conn.close()

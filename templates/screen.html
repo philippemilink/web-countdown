@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web countdown</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <style>
+    .red-text {
+    	color: red;
+    }
+
+    .display-1 {
+    	font-size: 12rem;
+    }
+
+    .display-4 {
+    	font-size: 7rem;
+    }
+	</style>
+  </head>
+  <body>
+  	<div class="container-fluid">
+  		<div class="row">
+  			<div class="col">
+		  		<h1 class="display-5 text-center" id="title">-</h1>
+		  		<br />
+		    	<h1 class="display-1 text-center" id="chrono">-</h1>
+		    	<br />
+		    	<h1 class="display-4 text-center" id="time">-</h1>
+		    </div>
+	    </div>
+
+	    <script type=text/javascript src="{{url_for('static', filename='jquery.js') }}"></script>
+	    <script type="text/javascript">
+    		$(function() {
+
+    			function update() {
+    				$.getJSON('/get_scren_data', function(data) {
+    					$("#time").html(data.time);
+
+    					if (data.running_talk) {
+    						$("#title").html(data.title);
+					        $("#chrono").html(data.chrono);
+					        
+					        if (data.ended) {
+					        	setTimeout(blink_chrono, 200)
+					        }
+
+					        if (data.less_minute) {
+					        	$("#chrono").addClass("red-text");
+					        }
+					        else {
+					        	$("#chrono").removeClass("red-text");
+					        }
+    					}
+    					else {
+    						$("#title").html("-");
+					        $("#chrono").html("-");
+					        $("#chrono").removeClass("red-text")
+    					}
+				        
+				    });
+    			}
+
+    			function blink_chrono() {
+				    $("#chrono").fadeOut(300);
+				    $("#chrono").fadeIn(300);
+				}
+				
+			    
+			    setInterval(update, 1000);
+			  });
+    	</script>
+  </body>
+</html>
