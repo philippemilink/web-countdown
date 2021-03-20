@@ -37,7 +37,6 @@ def home():
 	rows = cur.fetchall();
 	con.close()
 
-
 	return render_template("index.html", talks=rows, current_talk=get_current_talk())
 
 
@@ -47,7 +46,7 @@ def start_talk(talk_id):
 	con.row_factory = sql.Row
 
 	cur = con.cursor()
-	cur.execute("UPDATE talks SET real_start_hour=?, real_start_minute=? WHERE id = ?", 
+	cur.execute("UPDATE talks SET real_start_hour=?, real_start_minute=? WHERE id = ?",
 		(time.localtime().tm_hour, time.localtime().tm_min, talk_id))
 
 	con.commit()
@@ -73,7 +72,7 @@ def stop_talk(talk_id):
 	print(time_length.total_seconds() // 60)
 	
 	cur = con.cursor()
-	cur.execute("UPDATE talks SET real_length_minutes=? WHERE id = ?", 
+	cur.execute("UPDATE talks SET real_length_minutes=? WHERE id = ?",
 		(time_length.total_seconds() // 60, talk_id))
 
 	con.commit()
@@ -89,7 +88,7 @@ def screen():
 
 @app.route('/get_scren_data')
 def get_scren_data():
-	talk = get_current_talk()	
+	talk = get_current_talk()
 
 	data = dict()
 	data["time"] = time.strftime("%H:%M:%S", time.localtime())
@@ -103,14 +102,14 @@ def get_scren_data():
 
 		if (datetime.datetime.now() <= real_end):
 			hours, remainder = divmod((real_end - datetime.datetime.now()).seconds, 3600)
-			minutes, seconds = divmod(remainder, 60) 
+			minutes, seconds = divmod(remainder, 60)
 
 			data["chrono"] = '%s <small>min</small>  %s <small>s</small>' % (minutes, seconds)
 			data["ended"] = False
 			data["less_minute"] = (minutes == 0)
 		else:
 			hours, remainder = divmod((datetime.datetime.now() - real_end).seconds, 3600)
-			minutes, seconds = divmod(remainder, 60) 
+			minutes, seconds = divmod(remainder, 60)
 
 			data["chrono"] = '- %s <small>min</small>  %s <small>s</small>' % (minutes, seconds)
 			data["ended"] = True
