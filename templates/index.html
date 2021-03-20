@@ -6,60 +6,60 @@
     <link rel="stylesheet" href="static/bootstrap.min.css">
   </head>
   <body>
-  	<div class="container">
-  		<br />
+    <div class="container">
+      <br>
 
-  		<div class="row">
-  			<div class="col-xs-12 mx-auto">
-  				<a class="btn btn-primary" href="{{ url_for('screen') }}">Écran</a>
-  			</div>
-		</div>
+      <div class="row">
+	<div class="col-xs-12 mx-auto">
+	  <a class="btn btn-primary" href="{{ url_for('screen') }}">Écran</a>
+	</div>
+      </div>
 
-		<br />
+      <br>
 
-  		<div class="row">
-  			<div class="col">
-		  		<table class="table table-striped">
-		  			<thead>
-	  					<tr>
-	  						<th scope="col">Titre</th>
-	  						<th scope="col">Heure début théorique</th>
-	  						<th scope="col">Durée théorique</th>
-	  						<th scope="col">Heure début réelle</th>
-	  						<th scope="col">Durée réelle</th>
-	  						<th scope="col">Action</th>
-	  					</tr>
-		  			</thead>
-		  			<tbody>
-	  					{% for talk in talks %}
-				            <tr {% if talk['id'] == current_talk['id'] %}class="table-primary"{% endif %}>
-				               <td>{{ talk["title"] }}</td>
-				               <td>{{ talk["start_hour"] }}h{{ talk["start_minute"] }}</td>
-				               <td> {{ talk["length_minutes"] }} min</td>
-				               {% if talk["real_start_hour"] != None %}
-				               		<td>{{ talk["real_start_hour"] }}h{{ talk["real_start_minute"] }}</td>
-				               		{% if talk["real_length_minutes"] != None %}
-				               			<td>{{ talk["real_length_minutes"] }} min</td>
-				               			<td>-</td>
-			               			{% else %}
-			               				<td>-</td>
-			               				<td><a href="{{ url_for('stop_talk', talk_id=talk['id']) }}">Arrêter</button></td>
-			               			{% endif %}
-			               		{% else %}
-			               			<td>-</td>
-			               			<td>-</td>
-			               			{% if current_talk != None %}
-			               				<td>-</td>
-		               				{% else %}
-			               				<td><a href="{{ url_for('start_talk', talk_id=talk['id']) }}">Démarrer</button></td>
-	               					{% endif %}
-		               			{% endif %}
-				               
-				            </tr>
-				         {% endfor %}
-		  			</tbody>
-		  		</table>
-		    </div>
-	    </div>
+      <div class="row">
+	<div class="col">
+	  <table class="table table-striped">
+	    <thead>
+	      <tr>
+		<th scope="col">Titre</th>
+		<th scope="col">Heure début théorique</th>
+		<th scope="col">Durée théorique</th>
+		<th scope="col">Heure début réelle</th>
+		<th scope="col">Durée réelle</th>
+		<th scope="col">Action</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for talk in talks %}
+	      <tr {% if talk['id'] == current_talk['id'] %}class="table-primary"{% endif %}>
+		<td>{{ talk["title"] }}</td>
+		<td>{{ '%02d' % talk["start_hour"] }}h{{ '%02d' % talk["start_minute"] }}</td>
+		<td> {{ talk["length_minutes"] }} min</td>
+		{% if talk["real_start_hour"] != None %}
+		<td>{{ '%02d' % talk["real_start_hour"] }}h{{ '%02d' % talk["real_start_minute"] }}</td>
+		{% if talk["real_length_minutes"] != None %}
+		<td>{{ talk["real_length_minutes"] }} min</td>
+		<td>-</td>
+		{% else %}
+		<td>-</td>
+		<td><a class="btn btn-primary btn-sm" href="{{ url_for('stop_talk', talk_id=talk['id']) }}">Arrêter</a></td>
+		{% endif %}
+		{% else %}
+		<td>-</td>
+		<td>-</td>
+		{% if current_talk != None %}
+		<td>-</td>
+		{% else %}
+		<td><a class="btn btn-primary btn-sm" href="{{ url_for('start_talk', talk_id=talk['id']) }}">Démarrer</a></td>
+		{% endif %}
+		{% endif %}
+	      </tr>
+	      {% endfor %}
+	    </tbody>
+	  </table>
+	</div>
+      </div>
+    </div>
   </body>
 </html>
